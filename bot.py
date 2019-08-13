@@ -12,6 +12,7 @@ from handlers import *
 
 
 
+
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level = logging.INFO,
                     filename = 'bot.log'
@@ -22,6 +23,7 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
 
 
 subscribers = set()
+admins = set()
 
 
 
@@ -87,6 +89,7 @@ def main():
     dp.add_handler(MessageHandler(Filters.location, get_location, pass_user_data=True))
     dp.add_handler(CommandHandler('subscribe', subscribe))
     dp.add_handler(CommandHandler('unsubscribe', unsubscribe))
+    dp.add_handler(CommandHandler('amin_set', admin_subs))
 
     
     dp.add_handler(MessageHandler(Filters.photo, check_user_photo, pass_user_data=True))

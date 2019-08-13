@@ -16,7 +16,8 @@ def execute_data_from_base(tablename):
     cursor.execute(f"SELECT post_text, img, post_date, post_to FROM {tablename} where rowid = ?", (rand_numb,))
     data = cursor.fetchall()[0] 
     conn.close()      
-    return data    
+    return data  
+
 
 def pass_date_filter(date):
     post_date = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')    
@@ -38,9 +39,10 @@ def pass_filters(data, data_list):
     
     if pass_date_filter(post_date) == False:
         return False
-    if post_admin_approved() == False:
-        return False
     else: return True
+    # Сюда, возможно, позже добавить фильтр по полю post_to
+    # Он проверяет или в какой соцсети или месс был опубликова пост
+
 
 
 
@@ -56,9 +58,6 @@ def handle_data(tablename, number_of_posts):
     print(len(data_list))
     return data_list
 
-    
-def post_admin_approved():
-    return True
 
 
 

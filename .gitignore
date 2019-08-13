@@ -4,4 +4,5 @@ images/
 list_of_posts_base.db
 venv/
 settings.py
+*.log
 
