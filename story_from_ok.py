@@ -37,7 +37,7 @@ def get_data(soup, page_type, name_of_table):
             get_images = getpostdata.get_images(block=block, id=id, folder=name_of_table)
 
             data_to_base.append(
-                (id, date, link, count_of_comments, count_of_share, count_of_likes, post_text, get_images))
+                (id, date, link, count_of_comments, count_of_share, count_of_likes, post_text, get_images, None, None))
 
     print(len(data_to_base))
 
@@ -52,11 +52,12 @@ def create_database(data, name_of_table):
     # Создание таблицы
     cursor.execute(f"""CREATE TABLE IF NOT EXISTS {name_of_table}
                       (id text PRIMARY KEY, date text, url text, comments integer,
-                       shares integer, likes integer, post_text text, img text)
+                       shares integer, likes integer, post_text text, img text, 
+                       post_date text, post_to text)
                    """)
 
     # Вставляем данные в таблицу
-    cursor.executemany(f"INSERT INTO {name_of_table} VALUES (?,?,?,?,?,?,?,?)", data)
+    cursor.executemany(f"INSERT INTO {name_of_table} VALUES (?,?,?,?,?,?,?,?,?,?)", data)
 
     # Сохраняем изменения
     conn.commit()
@@ -72,11 +73,12 @@ def update_base(data, name_of_table):
         # Создание таблицы
         cursor.execute(f"""CREATE TABLE {name_of_table}
                               (id text PRIMARY KEY, date text, url text, comments integer,
-                               shares integer, likes integer, post_text text, img text)
+                               shares integer, likes integer, post_text text, img text,
+                               post_date text, post_to text)
                            """)
 
         # Вставляем данные в таблицу
-        cursor.executemany(f"INSERT INTO {name_of_table} VALUES (?,?,?,?,?,?,?,?)", data)
+        cursor.executemany(f"INSERT INTO {name_of_table} VALUES (?,?,?,?,?,?,?,?,?,?)", data)
         
 
     except:
@@ -102,7 +104,7 @@ def update_base(data, name_of_table):
                 break
 
         if data_id[0] != table_id[0]:
-            cursor.execute(f"INSERT INTO {name_of_table} VALUES (?,?,?,?,?,?,?,?)", data_id)
+            cursor.execute(f"INSERT INTO {name_of_table} VALUES (?,?,?,?,?,?,?,?,?,?)", data_id)
             count_of_insert += 1
 
     print('Добавлено ' + str(count_of_insert) + '.\nОбновлено ' + str(count_of_update) + '.')
