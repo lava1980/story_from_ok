@@ -15,9 +15,7 @@ def execute_data_from_base(tablename):
 
     cursor.execute(f"SELECT post_text, img, post_date, post_to FROM {tablename} where rowid = ?", (rand_numb,))
     data = cursor.fetchall()[0] 
-    conn.close()  
-    
-    print(data)
+    conn.close()      
     return data    
 
 def pass_date_filter(date):
@@ -31,9 +29,18 @@ def pass_date_filter(date):
     
 
 def pass_filters(data, data_list):
-    pass
+    if data in data_list: # Если уже такой пост есть -- пропускаем
+        return False
 
-
+    if data[2] == None:
+        post_date = '2019-01-01 00:00:01'
+    else: post_date = data[2]
+    
+    if pass_date_filter(post_date) == False:
+        return False
+    if post_admin_approved() == False:
+        return False
+    else: return True
 
 
 
@@ -42,22 +49,16 @@ def handle_data(tablename, number_of_posts):
     data_list = []
     while len(data_list) < number_of_posts:
         data = execute_data_from_base(tablename)
-        if data in data_list: # Если уже такой пост есть -- пропускаем
-            continue
-
-        if data[2] == None:
-            post_date = '2019-01-01 00:00:01'
-        else: post_date = data[2]
-        
-        if pass_date_filter(post_date) == False:
-            continue
-        if post_admin_approved() == False:
+        if pass_filters(data, data_list) == False:
             continue
         data_list.append(data)
+    print(data_list)
+    print(len(data_list))
     return data_list
 
+    
 def post_admin_approved():
-    pass
+    return True
 
 
 
