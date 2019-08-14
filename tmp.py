@@ -64,7 +64,7 @@ def handle_data(tablename, number_of_posts):
 
 
 
-# TODO Проверить или дата старше полугода
+# TODO 
 # TODO 
 
 
