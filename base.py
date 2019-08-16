@@ -4,6 +4,7 @@ import random
 import sqlite3
 
 import settings
+from utils import *
 
 
 
@@ -73,25 +74,31 @@ def create_users_table():
 
 
 
-def write_entry_to_base(entry):
+def write_data_to_base(entry):
     conn = sqlite3.connect('users.db')
-    cursor = conn.cursor()    
-    cursor.execute('INSERT INTO users (chat_id) VALUES (?)', entry)
+    cursor = conn.cursor()   
+     
+    cursor.execute(
+        'INSERT INTO users (chat_id, first_name, last_name, user_id, role) VALUES (?, ?, ?, ?, ?)', 
+        entry)    
     
     conn.commit()
     conn.close()      
 
 
+def write_initial_data_to_base(update, user_role):
+    data = get_initial_data(update, user_role)
+    write_data_to_base(data)
 
 
 
 
 
 
-#entry = ('5', '5', '5', '5', '5', '5', '5')
-entry = ('5')
+if __name__ == "__main__":   
 
-#handle_data('story_holodkova', 5)
-create_users_table()
-write_entry_to_base(entry)
-# check_date_filter('2019-02-14 13:01:00')
+    #entry = ('5', '5', '5', '5', '5', '5', '5')
+    # entry = ('5')
+
+    #handle_data('story_holodkova', 5)
+    create_users_table()
