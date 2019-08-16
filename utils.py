@@ -1,4 +1,5 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup
+from telegraph import Telegraph
 
 def get_keyboard():
     contact_button = KeyboardButton('Прислать контакты', request_contact=True)    
@@ -21,5 +22,15 @@ def get_initial_data(update, user_role):
 
 def admin_aprove():
     pass
+
+
+def create_telegraph_page(headline, html_content):
+    telegraph = Telegraph()
+    telegraph.create_account(short_name='14021980')
+    response = telegraph.create_page(
+        headline, html_content=html_content
+    )
+    print('https://telegra.ph/{}'.format(response['path']))
+    return 'https://telegra.ph/{}'.format(response['path'])
 
 

@@ -47,7 +47,10 @@ def admin_get_passw(bot, update):
         update.message.reply_text('Неверный пароль')
         return 'admin_passw' # Замыкаем на том же ключе, т.е. пароль ввёл неправильно
 
+
 def admin_handle_posts_to_tg(bot, job):
+    post_list = base.handle_data('story_holodkova', 5)
+    
     admin_list = base.get_admin_list('chat_id')
     for admin in admin_list:
         bot.sendMessage(chat_id=admin[0], text='Сообщения для админа')
