@@ -2,6 +2,7 @@ from glob import glob
 import logging
 import os
 import pprint
+import sqlite3
 from random import choice
 
 from telegram.ext import ConversationHandler
@@ -9,7 +10,6 @@ from telegram.ext import messagequeue as mq
 from telegram import User
 
 from utils import get_keyboard, get_initial_data
-from bot import subscribers, admins
 import settings, base
 
 def get_contact(bot, update):
@@ -47,9 +47,7 @@ def admin_get_passw(bot, update):
         update.message.reply_text('Неверный пароль')
         return 'admin_passw' # Замыкаем на том же ключе, т.е. пароль ввёл неправильно
 
-
-
-    
+   
 
 def dontknow(bot, update, user_data):
     update.message.reply_text('Не понимаю')       
@@ -57,5 +55,7 @@ def dontknow(bot, update, user_data):
 
 @mq.queuedmessage
 def send_updates(bot, job):
-    for chat_id in subscribers:
-        bot.sendMessage(chat_id=chat_id, text='Buzz!') # Вставить текст сообщений
+    users_list = base.list_from_base_column('chat_id')
+    for chat_id in users_list:
+        bot.sendMessage(chat_id=chat_id[0], text='Buzz!') # Вставить текст сообщений              
+    

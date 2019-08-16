@@ -77,21 +77,26 @@ def create_users_table():
 def write_data_to_base(entry):
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()  
-    # cursor.execute('SELECT chat_id FROM users') 
-    # list_of_id = cursor.fetchall()     
     cursor.execute(
         'INSERT OR IGNORE INTO users (chat_id, first_name, last_name, user_id, role) VALUES (?, ?, ?, ?, ?)', 
         entry)    
     
     conn.commit()
-    conn.close()      
-
+    conn.close()   
 
 def write_initial_data_to_base(update, user_role):
     data = get_initial_data(update, user_role)
     write_data_to_base(data)
 
 
+def list_from_base_column(column): # Возвращает список значений столбца
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute(f'SELECT {column} FROM users')
+    column_list = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return column_list
 
 
 

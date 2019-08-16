@@ -9,10 +9,6 @@ import settings
 from handlers import *
 
 
-
-
-
-
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level = logging.INFO,
                     filename = 'bot.log'
@@ -20,21 +16,8 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
 
 
 
-
-
-subscribers = set()
-admins = set()
-
-
-
-# TODO Что надо сделать?
-
-# TODO 1. Подписку - при подписке попадает в базу юзеров
-# TODO 2. Отписку - при отписке удаляется из базы юзеров
-
-# TODO Во время работы: Проверяет или юзер в базе
-# TODO Как он будет отправлять сообщения? По какому принципу?
-# TODO В базе выбрать 
+# TODO Чтобы все сообщения сперва приходили админу
+# TODO Чтобы всем остальным приходили только те сообщения, которые одобрит админ
 
 
 
@@ -49,15 +32,6 @@ def select_story_to_post(tablename):
 
 
 
-
-
-
-def my_test(bot, job):
-    bot.sendMessage(chat_id=529133148, text='Spam, spam, spam!!!')
-    job.interval += 5
-    if job.interval > 15:
-        bot.sendMessage(chat_id=529133148, text='No more spam for you')
-        job.schedule_removal()
 
 
 
