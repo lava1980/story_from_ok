@@ -14,3 +14,5 @@ def list_from_base_column(column): # Возвращает список знач�
 column = ('chat_id')
 p = list_from_base_column(column)
 print(p)
+
+# SELECT * FROM locations WHERE country_id='CA'; # Синтаксис Селект
