@@ -22,7 +22,6 @@ def get_contact(bot, update):
 def subscribe(bot, update):
     base.write_initial_data_to_base(update, 'user')
     update.message.reply_text('Вы подписались!', reply_markup=get_keyboard())
-    print(subscribers)
 
 
 def unsubscribe(bot, update):
@@ -42,7 +41,7 @@ def admin_start(bot, update):
 def admin_get_passw(bot, update):
     if update.message.text == settings.ADMIN_PASS: 
         update.message.reply_text('Вы авторизованы как админ')
-        base.write_initial_data_to_base(update, 'admin')
+        base.write_initial_data_to_base(update, 'admin') # Сделать, чтобы запись об админе обновлялась, если он сперва авторизовался под юзером, а потом под админом
         return ConversationHandler.END # Завершаем разговор, т.к. цель достигнута -- он ввёл пароль
     else:
         update.message.reply_text('Неверный пароль')

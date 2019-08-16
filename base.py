@@ -76,10 +76,11 @@ def create_users_table():
 
 def write_data_to_base(entry):
     conn = sqlite3.connect('users.db')
-    cursor = conn.cursor()   
-     
+    cursor = conn.cursor()  
+    # cursor.execute('SELECT chat_id FROM users') 
+    # list_of_id = cursor.fetchall()     
     cursor.execute(
-        'INSERT INTO users (chat_id, first_name, last_name, user_id, role) VALUES (?, ?, ?, ?, ?)', 
+        'INSERT OR IGNORE INTO users (chat_id, first_name, last_name, user_id, role) VALUES (?, ?, ?, ?, ?)', 
         entry)    
     
     conn.commit()
