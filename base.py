@@ -99,6 +99,16 @@ def list_from_base_column(column): # Возвращает список знач�
     conn.close()
     return column_list
 
+def get_admin_list(chatid): # Возвращает список значений столбца
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute(f'SELECT {chatid} FROM users WHERE role="admin"')
+    admin_list = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return admin_list
+
+
 
 def delete_string_from_base(column, value):
     conn = sqlite3.connect('users.db')

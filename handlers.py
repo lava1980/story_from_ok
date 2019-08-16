@@ -48,9 +48,9 @@ def admin_get_passw(bot, update):
         return 'admin_passw' # Замыкаем на том же ключе, т.е. пароль ввёл неправильно
 
 def admin_handle_posts_to_tg(bot, job):
-    admin_list = base.list_from_base_column('role')
+    admin_list = base.get_admin_list('chat_id')
     for admin in admin_list:
-        pass
+        bot.sendMessage(chat_id=admin[0], text='Сообщения для админа')
 
 
 def dontknow(bot, update, user_data):

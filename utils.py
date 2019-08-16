@@ -19,5 +19,7 @@ def get_initial_data(update, user_role):
     initial_user_data = (chat_id, first_name, last_name, user_id, role)
     return initial_user_data
 
+def admin_aprove():
+    pass
 
 

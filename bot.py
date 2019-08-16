@@ -8,6 +8,7 @@ from telegram.ext import messagequeue as mq
 
 import settings
 from handlers import *
+from utils import *
 
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
@@ -48,7 +49,8 @@ def main():
 
     dp = mybot.dispatcher
 
-    mybot.job_queue.run_repeating(send_updates, interval=5)
+    if admin_aprove() == True:
+        mybot.job_queue.run_repeating(send_updates, interval=5)
     mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(9,0,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
