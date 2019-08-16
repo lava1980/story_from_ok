@@ -99,6 +99,12 @@ def list_from_base_column(column): # Возвращает список знач�
     return column_list
 
 
+def delete_string_from_base(column, value):
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute(f'DELETE FROM users WHERE {column}=?', (value,))
+    conn.commit()
+    conn.close()
 
 
 if __name__ == "__main__":   
@@ -107,4 +113,5 @@ if __name__ == "__main__":
     # entry = ('5')
 
     #handle_data('story_holodkova', 5)
-    create_users_table()
+    # create_users_table()
+    delete_string_from_base('chat_id', '529133148')

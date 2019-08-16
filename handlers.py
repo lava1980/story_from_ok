@@ -25,12 +25,12 @@ def subscribe(bot, update):
 
 
 def unsubscribe(bot, update):
-    if update.message.chat_id in subscribers:
-        subscribers.remove(update.message.chat_id)
-        update.message.reply_text('Вы отписались.')
-    else:
-        update.message.reply_text('Вы не подписаны. Нажмите /subscibe чтобы подписаться')
-
+    user_list = base.list_from_base_column('chat_id')
+    for chat_id in user_list:
+        if str(update.message.chat_id) in chat_id[0]:
+            base.delete_string_from_base('chat_id', str(update.message.chat_id))            
+            update.message.reply_text('Вы отписались.')
+    
 
 
 def admin_start(bot, update):
