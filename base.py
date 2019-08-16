@@ -8,6 +8,7 @@ from utils import *
 
 
 
+
 def execute_data_from_base(tablename): 
     conn = sqlite3.connect('list_of_posts_base.db')
     cursor = conn.cursor()
@@ -112,6 +113,6 @@ if __name__ == "__main__":
     #entry = ('5', '5', '5', '5', '5', '5', '5')
     # entry = ('5')
 
-    #handle_data('story_holodkova', 5)
+    handle_data('story_holodkova', 5)
     # create_users_table()
-    delete_string_from_base('chat_id', '529133148')
+    # delete_string_from_base('chat_id', '529133148')

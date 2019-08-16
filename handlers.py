@@ -47,7 +47,11 @@ def admin_get_passw(bot, update):
         update.message.reply_text('Неверный пароль')
         return 'admin_passw' # Замыкаем на том же ключе, т.е. пароль ввёл неправильно
 
-   
+def admin_handle_posts_to_tg(bot, job):
+    admin_list = base.list_from_base_column('role')
+    for admin in admin_list:
+        pass
+
 
 def dontknow(bot, update, user_data):
     update.message.reply_text('Не понимаю')       
