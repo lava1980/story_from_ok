@@ -3,6 +3,9 @@ import datetime
 import random
 import sqlite3
 
+import settings
+from utils import *
+
 
 
 def execute_data_from_base(tablename): 
@@ -23,7 +26,7 @@ def pass_date_filter(date):
     post_date = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')    
     today = datetime.datetime.today()
     delta = today - post_date
-    if delta.days < 180:        
+    if delta.days < settings.DELAY_TERM:        
         return False
     else: return True
 
@@ -59,14 +62,43 @@ def handle_data(tablename, number_of_posts):
     return data_list
 
 
+def create_users_table():
+    conn = sqlite3.connect('users.db')    
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users
+                    (chat_id text PRIMARY KEY, phone_number text, name text, 
+                    first_name text, last_name text, user_id text, role text)'''    
+    )
+    conn.commit()
+    conn.close()
+
+
+
+def write_data_to_base(entry):
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()   
+     
+    cursor.execute(
+        'INSERT INTO users (chat_id, first_name, last_name, user_id, role) VALUES (?, ?, ?, ?, ?)', 
+        entry)    
+    
+    conn.commit()
+    conn.close()      
+
+
+def write_initial_data_to_base(update, user_role):
+    data = get_initial_data(update, user_role)
+    write_data_to_base(data)
 
 
 
 
 
-# TODO 
-# TODO 
 
+if __name__ == "__main__":   
 
-handle_data('story_holodkova', 5)
-# check_date_filter('2019-02-14 13:01:00')
+    #entry = ('5', '5', '5', '5', '5', '5', '5')
+    # entry = ('5')
+
+    #handle_data('story_holodkova', 5)
+    create_users_table()

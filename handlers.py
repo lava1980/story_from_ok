@@ -1,22 +1,27 @@
 from glob import glob
 import logging
 import os
+import pprint
 from random import choice
 
 from telegram.ext import ConversationHandler
 from telegram.ext import messagequeue as mq
+from telegram import User
 
-# from utils import get_keyboard, get_user_emo, is_cat
+from utils import get_keyboard, get_initial_data
 from bot import subscribers, admins
-import settings
+import settings, base
 
+def get_contact(bot, update):
+    print(update.message.contact)    
+    
   
 
 
         
 def subscribe(bot, update):
-    subscribers.add(update.message.chat_id)
-    update.message.reply_text('Вы подписались!')
+    base.write_initial_data_to_base(update, 'user')
+    update.message.reply_text('Вы подписались!', reply_markup=get_keyboard())
     print(subscribers)
 
 
@@ -35,13 +40,16 @@ def admin_start(bot, update):
 
 
 def admin_get_passw(bot, update):
-    if update.message.text == settings.ADMIN_PASS:
-        # Надо добавить в базу    update.message.reply_text('Вы авторизованы как админ')
+    if update.message.text == settings.ADMIN_PASS: 
         update.message.reply_text('Вы авторизованы как админ')
+        base.write_initial_data_to_base(update, 'admin')
         return ConversationHandler.END # Завершаем разговор, т.к. цель достигнута -- он ввёл пароль
     else:
         update.message.reply_text('Неверный пароль')
         return 'admin_passw' # Замыкаем на том же ключе, т.е. пароль ввёл неправильно
+
+
+
     
 
 def dontknow(bot, update, user_data):

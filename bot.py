@@ -73,9 +73,9 @@ def main():
 
     dp = mybot.dispatcher
 
-    mybot.job_queue.run_repeating(send_updates, interval=5)
+    mybot.job_queue.run_repeating(send_updates, interval=900)
 
-
+    dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(
         entry_points = [CommandHandler('admin', admin_start)], 
         states = {
