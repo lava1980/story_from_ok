@@ -1,3 +1,5 @@
+import os
+
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 from telegraph import Telegraph
 
@@ -34,3 +36,14 @@ def create_telegraph_page(headline, html_content):
     return 'https://telegra.ph/{}'.format(response['path'])
 
 
+def get_image(filename, foldername):
+    path = os.getcwd() + '/images/' + foldername + '/' + filename
+    image = open(path, 'rb')
+    return image
+
+
+
+
+if __name__ == "__main__":
+    #main()
+    get_image('1.jpg', 'story_holodkova')

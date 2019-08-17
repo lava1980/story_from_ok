@@ -8,8 +8,9 @@ from random import choice
 from telegram.ext import ConversationHandler
 from telegram.ext import messagequeue as mq
 from telegram import User
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from utils import get_keyboard, get_initial_data
+from utils import *
 import settings, base
 
 def get_contact(bot, update):
@@ -49,15 +50,29 @@ def admin_get_passw(bot, update):
 
 
 def admin_handle_posts_to_tg(bot, job):
-    post_list = base.handle_data('story_holodkova', 5)
-    
+    post_list = base.handle_data('story_holodkova', 5)    
     admin_list = base.get_admin_list('chat_id')
+    inlinekeyboard = [[InlineKeyboardButton('Да', callback_data='1'),
+                        InlineKeyboardButton('Нет', callback_data='2')]]
+    kbd_markup = InlineKeyboardMarkup(inlinekeyboard)
+
     for admin in admin_list:
-        bot.sendMessage(chat_id=admin[0], text='Сообщения для админа')
+        for post in post_list:
+            text = post[0]
+            image = post[1]            
+            if image != None:               
+                bot.send_photo(chat_id=admin[0], photo=get_image(image, 'story_holodkova'))
+            bot.sendMessage(chat_id=admin[0], text=text, reply_markup=kbd_markup)
 
 
 def dontknow(bot, update, user_data):
     update.message.reply_text('Не понимаю')       
+
+
+def admin_inline_keyboard(bot, update):
+    inlinekeyboard = [[InlineKeyboardButton('Да', callback_data='1'),
+                        InlineKeyboardButton('Нет', callback_data='2')]]
+    kbd_markup = InlineKeyboardMarkup(inlinekeyboard)
 
 
 @mq.queuedmessage

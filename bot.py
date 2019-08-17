@@ -51,7 +51,7 @@ def main():
 
     if admin_aprove() == True:
         mybot.job_queue.run_repeating(send_updates, interval=5)
-    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(9,0,0))
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(9,22,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(
