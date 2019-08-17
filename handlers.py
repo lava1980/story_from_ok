@@ -62,7 +62,8 @@ def get_post_to_tg(bot, job, admin):
         else: 
             tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
             bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard())
-
+# Передавать в клавиатуру разные цифры, чтобы можно было отследить,
+# что именно он нажал. Через переменные
 
 def get_aproved_list():
     pass
