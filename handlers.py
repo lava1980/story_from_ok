@@ -49,22 +49,36 @@ def admin_get_passw(bot, update):
         return 'admin_passw' # Замыкаем на том же ключе, т.е. пароль ввёл неправильно
 
 
-def admin_handle_posts_to_tg(bot, job):
-    post_list = base.handle_data('story_holodkova', 5)    
-    admin_list = base.get_admin_list('chat_id')
-    
+
+def get_post_to_tg(bot, job, admin):
+    post_list = base.handle_data('story_holodkova', 5)
+    for post in post_list:
+        text = handle_text(post[0])
+        image = post[1]            
+        if image != None:               
+            bot.send_photo(chat_id=admin[0], photo=get_image(image, 'story_holodkova'))        
+        if len(text) < 4096:
+            bot.sendMessage(chat_id=admin[0], text=text, reply_markup=get_inline_keyboard())
+        else: 
+            tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
+            bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard())
+
+
+def get_aproved_list():
+    pass
+
+
+def admin_handle_posts_to_tg(bot, job):    
+    admin_list = base.get_admin_list('chat_id')    
     for admin in admin_list:
-        for post in post_list:
-            text = handle_text(post[0])
-            image = post[1]            
-            if image != None:               
-                bot.send_photo(chat_id=admin[0], photo=get_image(image, 'story_holodkova'))
-            
-            if len(text) < 4096:
-                bot.sendMessage(chat_id=admin[0], text=text, reply_markup=get_inline_keyboard())
-            else: 
-                tg_text = create_telegraph_page('История', text_to_html(text))
-                bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard())
+        get_post_to_tg(bot, job, admin) 
+
+
+def func(bot, update):
+    query = update.callback_query
+    if query.data == '1':
+        print('Вы выбрали ДА')
+
 
 
 def dontknow(bot, update, user_data):

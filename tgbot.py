@@ -3,7 +3,8 @@ import logging
 import random
 import sqlite3
 
-from telegram.ext import Updater, ConversationHandler, CommandHandler, MessageHandler, RegexHandler, Filters
+from telegram.ext import Updater, CallbackQueryHandler, ConversationHandler, CommandHandler, \
+        MessageHandler, RegexHandler, Filters
 from telegram.ext import messagequeue as mq
 
 import settings
@@ -51,7 +52,7 @@ def main():
 
     if admin_aprove() == True:
         mybot.job_queue.run_repeating(send_updates, interval=5)
-    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(13,18,0))
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(15,29,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(
@@ -64,7 +65,7 @@ def main():
         },
         fallbacks = [MessageHandler(Filters.text, dontknow, pass_user_data=True)]
     )
-
+    dp.add_handler(CallbackQueryHandler(func))
     dp.add_handler(admin_mode)   
     dp.add_handler(CommandHandler('start', subscribe))
     dp.add_handler(CommandHandler('unsubscribe', unsubscribe))  
