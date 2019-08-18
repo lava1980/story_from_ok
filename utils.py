@@ -15,7 +15,7 @@ def get_keyboard():
     return my_keyboard
 
 
-def get_inline_keyboard(bot, update):
+def get_inline_keyboard(bot):
     inlinekeyboard = [[InlineKeyboardButton('Да', callback_data='1'),
                         InlineKeyboardButton('Нет', callback_data='0')]]
     kbd_markup = InlineKeyboardMarkup(inlinekeyboard)

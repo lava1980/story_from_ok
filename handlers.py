@@ -58,10 +58,10 @@ def get_post_to_tg(bot, job, admin):
         if image != None:               
             bot.send_photo(chat_id=admin[0], photo=get_image(image, 'story_holodkova'))        
         if len(text) < 4096:
-            bot.sendMessage(chat_id=admin[0], text=text, reply_markup=get_inline_keyboard(bot, update))
+            bot.sendMessage(chat_id=admin[0], text=text, reply_markup=get_inline_keyboard(bot))
         else: 
             tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
-            bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard(bot, update))
+            bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard(bot))
 # Передавать в клавиатуру разные цифры, чтобы можно было отследить,
 # что именно он нажал. Через переменные
 
@@ -75,7 +75,7 @@ def del_message(bot, update, msgid):
     bot.delete_message(chat_id = update.message.chat_id , message_id = msgid)
 
 def test_message(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text='Проверка работы удаления клавиатуры', reply_markup=get_inline_keyboard(bot, update))
+    bot.sendMessage(chat_id=update.message.chat_id, text='Проверка работы удаления клавиатуры', reply_markup=get_inline_keyboard(bot))
 
 
 
