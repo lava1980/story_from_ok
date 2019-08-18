@@ -13,11 +13,9 @@ def execute_data_from_base(tablename):
     conn = sqlite3.connect('list_of_posts_base.db')
     cursor = conn.cursor()
     cursor.execute(f"SELECT count(*) FROM {tablename}")
-    count_items = cursor.fetchone()[0]
-    
+    count_items = cursor.fetchone()[0]    
     rand_numb = random.randint(1, int(count_items))
-
-    cursor.execute(f"SELECT post_text, img, post_date, post_to FROM {tablename} where rowid = ?", (rand_numb,))
+    cursor.execute(f"SELECT post_text, img, post_date, post_to, id FROM {tablename} where rowid = ?", (rand_numb,))
     data = cursor.fetchall()[0] 
     conn.close()      
     return data  
@@ -109,10 +107,10 @@ def get_admin_list(chatid): # Возвращает список значений
     return admin_list
 
 
-def delete_string_from_base(column, value):
-    conn = sqlite3.connect('users.db')
+def delete_string_from_base(base, table, column, value):
+    conn = sqlite3.connect(base)
     cursor = conn.cursor()
-    cursor.execute(f'DELETE FROM users WHERE {column}=?', (value,))
+    cursor.execute(f'DELETE FROM {table} WHERE {column}=?', (value,))
     conn.commit()
     conn.close()
 

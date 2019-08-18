@@ -29,7 +29,7 @@ def unsubscribe(bot, update):
     user_list = base.list_from_base_column('chat_id')
     for chat_id in user_list:
         if str(update.message.chat_id) in chat_id[0]:
-            base.delete_string_from_base('chat_id', str(update.message.chat_id))            
+            base.delete_string_from_base('users.db', 'users', 'chat_id', str(update.message.chat_id))            
             update.message.reply_text('Вы отписались.')
     
 
@@ -58,10 +58,10 @@ def get_post_to_tg(bot, job, admin):
         if image != None:               
             bot.send_photo(chat_id=admin[0], photo=get_image(image, 'story_holodkova'))        
         if len(text) < 4096:
-            bot.sendMessage(chat_id=admin[0], text=text, reply_markup=get_inline_keyboard(bot))
+            bot.sendMessage(chat_id=admin[0], text=text, reply_markup=get_inline_keyboard(bot, post[4]))
         else: 
             tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
-            bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard(bot))
+            bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard(bot, post[4]))
 # Передавать в клавиатуру разные цифры, чтобы можно было отследить,
 # что именно он нажал. Через переменные
 
@@ -89,12 +89,17 @@ def func(bot, update):
     query = update.callback_query # Можно вывести на печать и посмотреть его
     # print(query)
     # print(query.message.message_id)
-    if query.data == '1':
-        print('Вы выбрали ДА')
+    if query.data != '1':    
+        print(type(query.data))
         bot.delete_message(chat_id = query.message.chat_id , message_id=query.message.message_id)
+        base.delete_string_from_base('list_of_posts_base.db', 'story_holodkova', 'id', query.data)            
+        query.message.reply_text(query.data)
+        new_data = base.execute_data_from_base('story_holodkova')
 
         
+# TODO По нажатию НЕТ должно:
 
+# TODO 3. Отобрать из базы случайную историю и прислать её в чат на модерацию
 
 
 def dontknow(bot, update, user_data):
