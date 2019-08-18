@@ -75,8 +75,12 @@ def get_image(filename, foldername):
     return image
 
 
-
-
+def delete_image(filename, foldername):
+    path = path = os.getcwd() + '/images/' + foldername + '/' + filename
+    if os.path.exists(path):
+        os.remove(path)
+    else: print('Нет такого изображения: ' + filename)
+    
 
 
 if __name__ == "__main__":

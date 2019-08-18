@@ -113,6 +113,7 @@ def delete_string_from_base(base, table, column, value):
     cursor.execute(f'DELETE FROM {table} WHERE {column}=?', (value,))
     conn.commit()
     conn.close()
+    print(f'Удалил из {table} айди {value}')
 
 
 if __name__ == "__main__":   

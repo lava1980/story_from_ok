@@ -50,51 +50,47 @@ def admin_get_passw(bot, update):
 
 
 
-def get_post_to_tg(bot, job, admin):
+
+def send_one_post_to_admin(bot, post, chat_id):
+    text = handle_text(post[0])
+    image = post[1]            
+    if image != None:               
+        bot.send_photo(chat_id=chat_id, photo=get_image(image, 'story_holodkova'))        
+    if len(text) < 4096:
+        bot.sendMessage(chat_id=chat_id, text=text, reply_markup=get_inline_keyboard(bot, post[4]))
+    else: 
+        tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
+        bot.sendMessage(chat_id=chat_id, text=tg_text, reply_markup=get_inline_keyboard(bot, post[4]))
+    
+
+def send_posts_to_admin(bot, job, chat_id):
     post_list = base.handle_data('story_holodkova', 5)
     for post in post_list:
-        text = handle_text(post[0])
-        image = post[1]            
-        if image != None:               
-            bot.send_photo(chat_id=admin[0], photo=get_image(image, 'story_holodkova'))        
-        if len(text) < 4096:
-            bot.sendMessage(chat_id=admin[0], text=text, reply_markup=get_inline_keyboard(bot, post[4]))
-        else: 
-            tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
-            bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard(bot, post[4]))
-# Передавать в клавиатуру разные цифры, чтобы можно было отследить,
-# что именно он нажал. Через переменные
+        send_one_post_to_admin(bot, post, chat_id)
+
 
 def get_aproved_list():
     pass
 
 
-def del_message(bot, update, msgid):     
-    
-    print(msgid)
-    bot.delete_message(chat_id = update.message.chat_id , message_id = msgid)
-
-def test_message(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text='Проверка работы удаления клавиатуры', reply_markup=get_inline_keyboard(bot))
-
-
-
 def admin_handle_posts_to_tg(bot, job):    
     admin_list = base.get_admin_list('chat_id')    
     for admin in admin_list:
-        get_post_to_tg(bot, job, admin) 
+        chat_id = admin[0]
+        send_posts_to_admin(bot, job, chat_id) 
 
 
 def func(bot, update):
     query = update.callback_query # Можно вывести на печать и посмотреть его
     # print(query)
     # print(query.message.message_id)
-    if query.data != '1':    
-        print(type(query.data))
+    if query.data != '1':    # В query.data хранится айди истории
+        print(type(query.data))        
         bot.delete_message(chat_id = query.message.chat_id , message_id=query.message.message_id)
-        base.delete_string_from_base('list_of_posts_base.db', 'story_holodkova', 'id', query.data)            
-        query.message.reply_text(query.data)
+        base.delete_string_from_base('list_of_posts_base.db', 'story_holodkova', 'id', query.data)                    
+        delete_image()  # Доделать удаление карртинки
         new_data = base.execute_data_from_base('story_holodkova')
+        send_one_post_to_admin(bot, new_data, query.message.chat_id)
 
         
 # TODO По нажатию НЕТ должно:
