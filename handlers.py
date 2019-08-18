@@ -58,10 +58,10 @@ def get_post_to_tg(bot, job, admin):
         if image != None:               
             bot.send_photo(chat_id=admin[0], photo=get_image(image, 'story_holodkova'))        
         if len(text) < 4096:
-            bot.sendMessage(chat_id=admin[0], text=text, reply_markup=get_inline_keyboard(bot))
+            bot.sendMessage(chat_id=admin[0], text=text, reply_markup=get_inline_keyboard(bot, update))
         else: 
             tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
-            bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard(bot))
+            bot.sendMessage(chat_id=admin[0], text=tg_text, reply_markup=get_inline_keyboard(bot, update))
 # Передавать в клавиатуру разные цифры, чтобы можно было отследить,
 # что именно он нажал. Через переменные
 
@@ -86,10 +86,14 @@ def admin_handle_posts_to_tg(bot, job):
 
 
 def func(bot, update):
-    query = update.callback_query
+    query = update.callback_query # Можно вывести на печать и посмотреть его
+    # print(query)
+    # print(query.message.message_id)
     if query.data == '1':
         print('Вы выбрали ДА')
-        del_message(bot, update, query.inline_message_id)
+        bot.delete_message(chat_id = query.message.chat_id , message_id=query.message.message_id)
+
+        
 
 
 

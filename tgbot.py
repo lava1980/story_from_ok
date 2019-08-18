@@ -52,7 +52,7 @@ def main():
 
     if admin_aprove() == True:
         mybot.job_queue.run_repeating(send_updates, interval=5)
-    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(14,58,0))
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(17,1,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(
@@ -69,7 +69,8 @@ def main():
     dp.add_handler(admin_mode)   
     dp.add_handler(CommandHandler('start', subscribe))
     dp.add_handler(CommandHandler('unsubscribe', unsubscribe))  
-    dp.add_handler(MessageHandler(Filters.text, test_message))
+    
+    # dp.add_handler(MessageHandler(Filters.text, test_message))
       
 
 
