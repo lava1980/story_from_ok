@@ -5,7 +5,7 @@ import sqlite3
 
 import settings
 from utils import *
-
+# from utils import get_initial_data
 
 
 
@@ -14,9 +14,18 @@ def execute_data_from_base(tablename):
     cursor = conn.cursor()
     cursor.execute(f"SELECT count(*) FROM {tablename}")
     count_items = cursor.fetchone()[0]    
-    rand_numb = random.randint(1, int(count_items))
-    cursor.execute(f"SELECT post_text, img, post_date, post_to, id FROM {tablename} where rowid = ?", (rand_numb,))
-    data = cursor.fetchall()[0] 
+    try:
+        rand_numb = random.randint(1, int(count_items))
+        cursor.execute(f"SELECT post_text, img, post_date, post_to, id FROM {tablename} where rowid = ?", (rand_numb,))
+        logging.info(f'Выборка из базы, cursor.fetchall(): {cursor.fetchall()}')
+        data = cursor.fetchall()[0] 
+    except IndexError:
+        logging.info('Неудачно извлекли данные из базы. Попытка номер два.')
+        rand_numb = random.randint(1, int(count_items))
+        cursor.execute(f"SELECT post_text, img, post_date, post_to, id FROM {tablename} where rowid = ?", (rand_numb,))
+        logging.info(f'Выборка из базы, cursor.fetchall(): {cursor.fetchall()}')        
+        data = cursor.fetchall()[0] 
+        
     conn.close()      
     return data  
 
@@ -56,8 +65,6 @@ def handle_data(tablename, number_of_posts):
         if pass_filters(data, data_list) == False:
             continue
         data_list.append(data)
-    print(data_list)
-    print(len(data_list))
     return data_list
 
 
@@ -81,6 +88,17 @@ def write_data_to_base(entry):
     
     conn.commit()
     conn.close()   
+
+def get_initial_data(update, user_role):
+    chat_id = update.message.chat_id
+    first_name = update.message.chat.first_name
+    last_name = update.message.chat.last_name
+    user_id = update.message.from_user.id
+    role = user_role    
+    initial_user_data = (chat_id, first_name, last_name, user_id, role)    
+    return initial_user_data
+
+
 
 def write_initial_data_to_base(update, user_role):
     data = get_initial_data(update, user_role)
@@ -112,15 +130,20 @@ def delete_string_from_base(base, table, column, value):
     cursor = conn.cursor()
     cursor.execute(f'DELETE FROM {table} WHERE {column}=?', (value,))
     conn.commit()
-    conn.close()
-    print(f'Удалил из {table} айди {value}')
+    conn.close()    
+    logging.info(f'Удалил из {table} айди {value}')
 
 
-if __name__ == "__main__":   
-
+def main():
     #entry = ('5', '5', '5', '5', '5', '5', '5')
     # entry = ('5')
 
-    handle_data('story_holodkova', 5)
+    # handle_data('story_holodkova', 5)
     # create_users_table()
     # delete_string_from_base('chat_id', '529133148')
+    pass
+
+
+if __name__ == "__main__":   
+    main()
+

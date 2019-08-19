@@ -5,3 +5,4 @@ lxml==4.3.4
 python-telegram-bot
 requests==2.22.0
 soupsieve==1.9.2
+telegraph==1.4.0
