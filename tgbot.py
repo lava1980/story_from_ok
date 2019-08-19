@@ -24,13 +24,7 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
 
 
 
-def select_story_to_post(tablename): 
-        conn = sqlite3.connect('list_of_posts_base.db')
-        cursor = conn.cursor()
-        cursor.execute(f"SELECT id FROM {tablename}")
-        pass
-
-        
+     
 
 
 
@@ -50,9 +44,9 @@ def main():
 
     dp = mybot.dispatcher
 
-    if admin_aprove() == True:
-        mybot.job_queue.run_repeating(send_updates, interval=5)
-    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(10,59,0))
+    
+    mybot.job_queue.run_repeating(send_updates, interval=5, first=60)
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(14,56,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(

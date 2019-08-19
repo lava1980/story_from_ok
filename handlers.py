@@ -51,7 +51,7 @@ def admin_get_passw(bot, update):
 
 
 
-def send_one_post_to_admin(bot, post, chat_id):
+def send_one_post(bot, post, chat_id):
     text = handle_text(post[0])
     images = post[1]
     post_id = post[4]            
@@ -70,27 +70,23 @@ def send_one_post_to_admin(bot, post, chat_id):
                 chat_id=chat_id, text=tg_text, 
                 reply_markup=get_inline_keyboard(bot, images + ', ' + post_id)
                 )
-    
 
-def send_posts_to_admin(bot, job, chat_id):
-    aproved_post_list = []
-    post_list = base.handle_data('story_holodkova', 5)
+post_list = base.handle_data('story_holodkova', 5)     
+
+
+def send_posts_to_admin(bot, job, chat_id):    
     for post in post_list:
         try:
-            send_one_post_to_admin(bot, post, chat_id)
-            aproved_post_list.append(post)
+            send_one_post(bot, post, chat_id)
         except TelegraphException:
+            remove_item_from_post_list(post_list, post[4])
             new_data = base.execute_data_from_base('story_holodkova')
-            send_one_post_to_admin(bot, new_data, chat_id)
-            aproved_post_list.append(new_data)
+            send_one_post(bot, new_data, chat_id)
+            post_list.append(new_data)
 
-    print(aproved_post_list)
-    print(len(aproved_post_list))
+
 
             
-
-def get_aproved_list():
-    pass
 
 
 def admin_handle_posts_to_tg(bot, job):    
@@ -107,12 +103,16 @@ def func(bot, update):
         bot.delete_message(chat_id = query.message.chat_id , message_id=query.message.message_id)
         
         base.delete_string_from_base('list_of_posts_base.db', 'story_holodkova', 'id', post_id)                    
-        remove_item_from_post_list(aproved_post_list, post_id)
+        remove_item_from_post_list(post_list, post_id)
         
         if images_list != '':
             delete_images(images_list, 'story_holodkova')
+        
         new_data = base.execute_data_from_base('story_holodkova')
-        send_one_post_to_admin(bot, new_data, query.message.chat_id)
+        print(len(post_list))
+        post_list.append(new_data)
+        send_one_post(bot, new_data, query.message.chat_id)        
+        print(len(post_list))
 
         
 # TODO По нажатию НЕТ должно:
@@ -129,6 +129,11 @@ def dontknow(bot, update, user_data):
 @mq.queuedmessage
 def send_updates(bot, job):
     users_list = base.list_from_base_column('chat_id')
-    for chat_id in users_list:
-        bot.sendMessage(chat_id=chat_id[0], text='Buzz!') # Вставить текст сообщений              
-    
+    for user in users_list:
+        #bot.sendMessage(chat_id=chat_id[0], text='Buzz!') # Вставить текст сообщений              
+        post = post_list[-1]
+        chat_id = user[0]
+        
+        send_one_post(bot, post, chat_id)
+        post_list.remove(post_list[-1])
+

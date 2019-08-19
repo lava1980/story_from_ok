@@ -1,10 +1,14 @@
 import os
+import logging
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 
 from telegraph import Telegraph
 from telegraph.exceptions import TelegraphException
+
+
+import base
 
 def get_keyboard():
     contact_button = KeyboardButton('Прислать контакты', request_contact=True)    
@@ -40,6 +44,7 @@ def get_initial_data(update, user_role):
     user_id = update.message.from_user.id
     role = user_role
     initial_user_data = (chat_id, first_name, last_name, user_id, role)
+    logging.info('Результат функции get_initial_data: ' + initial_user_data)
     return initial_user_data
 
 def admin_aprove():
@@ -91,18 +96,15 @@ def delete_images(images_list, foldername):
         else: print('Нет такого изображения: ' + image)
     
 
-def remove_item_from_post_list(aproved_post_list, del_id):
-    for post in aproved_post_list:
+def remove_item_from_post_list(post_list, del_id):
+    for post in post_list:
         post_id = post[4]
         if post_id == del_id:
-            del aproved_post_list[aproved_post_list.index(post)]
+            del post_list[post_list.index(post)]
             print(f'Удалили строку с айди {post_id}')
-    print(aproved_post_list)
-    print(len(aproved_post_list))
-    return aproved_post_list
+    return post_list
 
         
-
     
 
 
