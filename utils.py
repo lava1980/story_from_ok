@@ -50,17 +50,12 @@ def handle_text(text):
     text2 = text1.replace('\n \n', '<rrrr>')   
     text3 = text2.replace(' \n \n', '<rrrr>')
     text4 = text3.replace('\n', '\n\n')
-    text5 = text4.replace('<rrrr>', '\n\n')
-    
-    
-    print(text5) 
-    # \n \n
+    text5 = text4.replace('<rrrr>', '\n\n')    
     return text5
 
 
 def text_to_html(text):
-    html_text = text.replace('\n', '<br />')
-    # print(html_text)
+    html_text = text.replace('\n', '<br />')    
     return html_text
 
 
@@ -89,7 +84,10 @@ def delete_images(images_list, foldername):
     for image in images_list:
         path = path = os.getcwd() + '/images/' + foldername + '/' + image
         if os.path.exists(path):
-            os.remove(path)
+            try:
+                os.remove(path)
+            except IsADirectoryError:
+                print('История в базе без изображения. Удалять нечего.')
         else: print('Нет такого изображения: ' + image)
     
 
