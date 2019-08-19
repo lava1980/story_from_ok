@@ -53,21 +53,34 @@ def admin_get_passw(bot, update):
 
 def send_one_post_to_admin(bot, post, chat_id):
     text = handle_text(post[0])
-    image = post[1]            
-    if image != None:               
-        bot.send_photo(chat_id=chat_id, photo=get_image(image, 'story_holodkova'))        
+    images = post[1]            
+    if images != None:   
+        # Передаём только первое изображение            
+        bot.send_photo(chat_id=chat_id, photo=get_image(images.split(', ')[0], 'story_holodkova'))        
+    else: images = ''
     if len(text) < 4096:
-        bot.sendMessage(chat_id=chat_id, text=text, reply_markup=get_inline_keyboard(bot, post[4]))
+        bot.sendMessage(
+                chat_id=chat_id, text=text, 
+                reply_markup=get_inline_keyboard(bot, images + ', ' + post[4])
+                )
     else: 
         tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
-        bot.sendMessage(chat_id=chat_id, text=tg_text, reply_markup=get_inline_keyboard(bot, post[4]))
+        bot.sendMessage(
+                chat_id=chat_id, text=tg_text, 
+                reply_markup=get_inline_keyboard(bot, images + ', ' + post[4])
+                )
     
 
 def send_posts_to_admin(bot, job, chat_id):
     post_list = base.handle_data('story_holodkova', 5)
     for post in post_list:
-        send_one_post_to_admin(bot, post, chat_id)
+        try:
+            send_one_post_to_admin(bot, post, chat_id)
+        except TelegraphException:
+            new_data = base.execute_data_from_base('story_holodkova')
+            send_one_post_to_admin(bot, new_data, chat_id)
 
+            
 
 def get_aproved_list():
     pass
@@ -85,10 +98,12 @@ def func(bot, update):
     # print(query)
     # print(query.message.message_id)
     if query.data != '1':    # В query.data хранится айди истории
-        print(type(query.data))        
+        print(type(query.data))   
+        post_id, images_list = parse_inline_data(query.data)     
         bot.delete_message(chat_id = query.message.chat_id , message_id=query.message.message_id)
-        base.delete_string_from_base('list_of_posts_base.db', 'story_holodkova', 'id', query.data)                    
-        delete_image()  # Доделать удаление карртинки
+        base.delete_string_from_base('list_of_posts_base.db', 'story_holodkova', 'id', post_id)                    
+        if images_list != '':
+            delete_images(images_list, 'story_holodkova')  # Доделать удаление карртинки
         new_data = base.execute_data_from_base('story_holodkova')
         send_one_post_to_admin(bot, new_data, query.message.chat_id)
 
