@@ -15,17 +15,14 @@ from utils import *
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level = logging.INFO,
                     filename = 'bot.log'
-                    )
-
-
-
-# TODO Чтобы все сообщения сперва приходили админу
+                  # TODO Чтобы все сообщения сперва приходили админу
 # TODO Чтобы всем остальным приходили только те сообщения, которые одобрит админ
 
 
 
      
 
+  )
 
 
 
@@ -45,8 +42,8 @@ def main():
     dp = mybot.dispatcher
 
     
-    mybot.job_queue.run_repeating(send_updates, interval=5, first=60)
-    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(14,56,0))
+    mybot.job_queue.run_repeating(send_updates, interval=5, first=180)
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(19,6,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(

@@ -10,6 +10,7 @@ from telegraph.exceptions import TelegraphException
 
 import base
 
+
 def get_keyboard():
     contact_button = KeyboardButton('Прислать контакты', request_contact=True)    
     my_keyboard = ReplyKeyboardMarkup([                                     
@@ -35,21 +36,6 @@ def parse_inline_data(data):
     return post_id, images_list
     
 
-
-
-def get_initial_data(update, user_role):
-    chat_id = update.message.chat_id
-    first_name = update.message.chat.first_name
-    last_name = update.message.chat.last_name
-    user_id = update.message.from_user.id
-    role = user_role
-    initial_user_data = (chat_id, first_name, last_name, user_id, role)
-    logging.info('Результат функции get_initial_data: ' + initial_user_data)
-    return initial_user_data
-
-def admin_aprove():
-    pass
-
 def handle_text(text):
     text1 = text.replace('\n\n', '<rrrr>')
     text2 = text1.replace('\n \n', '<rrrr>')   
@@ -71,7 +57,6 @@ def create_telegraph_page(headline, html_content):
     response = telegraph.create_page(
         headline, html_content=html_content
     )
-    print('https://telegra.ph/{}'.format(response['path']))
     return 'https://telegra.ph/{}'.format(response['path'])
 
 
@@ -92,8 +77,8 @@ def delete_images(images_list, foldername):
             try:
                 os.remove(path)
             except IsADirectoryError:
-                print('История в базе без изображения. Удалять нечего.')
-        else: print('Нет такого изображения: ' + image)
+                logging.info('История в базе без изображения. Удалять нечего.')
+        else: logging.info('Нет такого изображения: ' + image)
     
 
 def remove_item_from_post_list(post_list, del_id):
@@ -101,7 +86,7 @@ def remove_item_from_post_list(post_list, del_id):
         post_id = post[4]
         if post_id == del_id:
             del post_list[post_list.index(post)]
-            print(f'Удалили строку с айди {post_id}')
+            logging.info(f'Удалили строку с айди {post_id}')
     return post_list
 
         
