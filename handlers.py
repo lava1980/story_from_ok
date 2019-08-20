@@ -140,6 +140,7 @@ def info_about_post_list_for_logging():
 
 @mq.queuedmessage
 def send_updates(bot, job):
+    global post_list
     # Переменная для удобного просмотра списка постов. Только для логинга
     post_list_for_logging = info_about_post_list_for_logging()
     logging.info(f'Всего будет отправлено {str(len(post_list_for_logging))}.')
@@ -152,8 +153,10 @@ def send_updates(bot, job):
                 chat_id = user[0]
                 logging.info(f'Отправляем сообщения пользователю {chat_id}')        
                 send_one_post(bot, post, chat_id)
-                del post_list[0]
-                del post_list_for_logging[0]
+                #del post_list[0]
+                #del post_list_for_logging[0]
             except IndexError:
                 print('В списке постов нет данных. Пользователи получили все сообщения.')
                 logging.info('В списке постов нет данных. Пользователи получили все сообщения.')
+    post_list = []
+    logging.info('Обнулили список постов')
