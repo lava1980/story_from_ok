@@ -98,7 +98,7 @@ def get_initial_data(update, user_role):
     user_id = update.message.from_user.id
     role = user_role
     initial_user_data = (chat_id, first_name, last_name, user_id, role)
-    logging.info('Результат функции get_initial_data: ' + initial_user_data)
+    logging.info('Результат функции get_initial_data: ' + str(initial_user_data))
     return initial_user_data
 
 
@@ -135,6 +135,7 @@ def delete_string_from_base(base, table, column, value):
     conn.commit()
     conn.close()    
     logging.info(f'Удалил из {table} айди {value}')
+    print(f'Удалил из {table} айди {value}')
 
 
 if __name__ == "__main__":   

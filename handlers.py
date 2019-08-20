@@ -73,14 +73,14 @@ def send_one_post(bot, post, chat_id):
                 chat_id=chat_id, text=text, 
                 reply_markup=get_inline_keyboard(bot, images + ', ' + post_id)
                 )
-        logging.info(f'Отправили сообщение в Телеграм: {text[:50]}...')
+        logging.info(f'Отправили сообщение в Телеграм: {post_id}, {text[:50]}...')
     else: 
         tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
         bot.sendMessage(
                 chat_id=chat_id, text=tg_text, 
                 reply_markup=get_inline_keyboard(bot, images + ', ' + post_id)
                 )
-        logging.info(f'Отправили сообщение в Телеграф: {text[:50]}...')
+        logging.info(f'Отправили сообщение в Телеграф: {post_id}, {text[:50]}...')
 
 post_list = base.handle_data('story_holodkova', 5)     
 
@@ -110,7 +110,7 @@ def admin_handle_posts_to_tg(bot, job):
 def func(bot, update):
     query = update.callback_query # Можно вывести на печать и посмотреть его
     if query.data != '1':    # В query.data хранится айди истории
-        logging.info('Админ нажал НЕТ.')        
+        logging.info('******** АДМИН НАЖАЛ НЕТ **********')        
         post_id, images_list = parse_inline_data(query.data) 
 
         bot.delete_message(chat_id = query.message.chat_id , message_id=query.message.message_id)        
@@ -118,8 +118,7 @@ def func(bot, update):
         remove_item_from_post_list(post_list, post_id)
         logging.info(f'Удалили из списка постов неподходящее значение: {post_id}')        
         if images_list != '':
-            delete_images(images_list, 'story_holodkova')
-        
+            delete_images(images_list, 'story_holodkova')        
         new_data = base.execute_data_from_base('story_holodkova')
         logging.info('Длина списка постов: ' + str(len(post_list)))
         post_list.append(new_data)
@@ -134,17 +133,23 @@ def dontknow(bot, update, user_data):
 
 
 
+def info_about_post_list_for_logging():
+    post_list_for_logging = []
+    for post in post_list:
+        post_list_for_logging.append(post[0][:50])
+    return post_list_for_logging
+
 
 @mq.queuedmessage
 def send_updates(bot, job):
+    logging.info(f'Всего будет отправлено {str(len(info_about_post_list_for_logging()))}.')
+    logging.info(f'Список постов для отправки юзерам: {str(info_about_post_list_for_logging())}')
     users_list = base.list_from_base_column('chat_id')
-    for user in users_list:
-        #bot.sendMessage(chat_id=chat_id[0], text='Buzz!') # Вставить текст сообщений              
+    for user in users_list:        
         try:
             post = post_list[-1]
             chat_id = user[0]
-            logging.info(f'Отправляем сообщения пользователю {chat_id}')
-        
+            logging.info(f'Отправляем сообщения пользователю {chat_id}')        
             send_one_post(bot, post, chat_id)
             post_list.remove(post_list[-1])
         except IndexError:

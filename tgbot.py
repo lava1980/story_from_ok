@@ -37,17 +37,14 @@ def main():
     dp = mybot.dispatcher
 
     
-    mybot.job_queue.run_repeating(send_updates, interval=10, first=300)
-    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(4,31,0))
+    mybot.job_queue.run_repeating(send_updates, interval=30, first=300)
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(12,0,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(
         entry_points = [CommandHandler('admin', admin_start)], 
         states = {
-                'admin_passw': [MessageHandler(Filters.text, admin_get_passw)]
-                
-                
-                     
+                'admin_passw': [MessageHandler(Filters.text, admin_get_passw)]                                       
         },
         fallbacks = [MessageHandler(Filters.text, dontknow, pass_user_data=True)]
     )
