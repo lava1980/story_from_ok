@@ -121,10 +121,10 @@ def func(bot, update):
             delete_images(images_list, 'story_holodkova')
         
         new_data = base.execute_data_from_base('story_holodkova')
-        logging.info('Длина списка постов: ' + len(post_list))
+        logging.info('Длина списка постов: ' + str(len(post_list)))
         post_list.append(new_data)
         send_one_post(bot, new_data, query.message.chat_id)        
-        logging.info('После добавления новых постов длина списка: ' + len(post_list))
+        logging.info('После добавления новых постов длина списка: ' + str(len(post_list)))
 
         
 
@@ -151,3 +151,7 @@ def send_updates(bot, job):
             print('В списке постов нет данных. Пользователи получили все сообщения.')
             logging.info('В списке постов нет данных. Пользователи получили все сообщения.')
 
+# TODO Проверять, когда нажал НЕТ и подкинулся новый пост:
+
+# TODO - чтобы его не было в текущем списке
+# TODO - чтобы он не был из тех, что я только что удалил (но, по идее, и не должен быть, т.к. я удалил его из базы)
