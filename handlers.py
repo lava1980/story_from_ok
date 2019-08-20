@@ -14,7 +14,7 @@ from utils import *
 import settings, base
 
 
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s - %(message)s',
                     level = logging.INFO,
                     filename = 'bot.log'
                     )
@@ -95,9 +95,7 @@ def send_posts_to_admin(bot, job, chat_id):
             send_one_post(bot, new_data, chat_id)
             post_list.append(new_data)
 
-
-
-            
+       
 
 
 def admin_handle_posts_to_tg(bot, job):    
@@ -142,21 +140,20 @@ def info_about_post_list_for_logging():
 
 @mq.queuedmessage
 def send_updates(bot, job):
-    logging.info(f'Всего будет отправлено {str(len(info_about_post_list_for_logging()))}.')
-    logging.info(f'Список постов для отправки юзерам: {str(info_about_post_list_for_logging())}')
+    # Переменная для удобного просмотра списка постов. Только для логинга
+    post_list_for_logging = info_about_post_list_for_logging()
+    logging.info(f'Всего будет отправлено {str(len(post_list_for_logging))}.')
+    logging.info(f'Список постов для отправки юзерам: {str(post_list_for_logging)}')
     users_list = base.list_from_base_column('chat_id')
-    for user in users_list:        
-        try:
-            post = post_list[-1]
-            chat_id = user[0]
-            logging.info(f'Отправляем сообщения пользователю {chat_id}')        
-            send_one_post(bot, post, chat_id)
-            post_list.remove(post_list[-1])
-        except IndexError:
-            print('В списке постов нет данных. Пользователи получили все сообщения.')
-            logging.info('В списке постов нет данных. Пользователи получили все сообщения.')
-
-# TODO Проверять, когда нажал НЕТ и подкинулся новый пост:
-
-# TODO - чтобы его не было в текущем списке
-# TODO - чтобы он не был из тех, что я только что удалил (но, по идее, и не должен быть, т.к. я удалил его из базы)
+    for user in users_list: 
+        for post in post_list:       
+            try:                
+                logging.info(f'НОВЫЙ СПИСОК ПОСТОВ для отправки юзерам: {str(post_list_for_logging)}')
+                chat_id = user[0]
+                logging.info(f'Отправляем сообщения пользователю {chat_id}')        
+                send_one_post(bot, post, chat_id)
+                del post_list[0]
+                del post_list_for_logging[0]
+            except IndexError:
+                print('В списке постов нет данных. Пользователи получили все сообщения.')
+                logging.info('В списке постов нет данных. Пользователи получили все сообщения.')

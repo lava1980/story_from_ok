@@ -8,7 +8,7 @@ import settings
 from utils import *
 
 
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s - %(message)s',
                     level = logging.INFO,
                     filename = 'bot.log'
                     )

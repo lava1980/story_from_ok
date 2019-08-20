@@ -12,7 +12,7 @@ from handlers import *
 from utils import *
 
 
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s - %(message)s',
                     level = logging.INFO,
                     filename = 'bot.log'
                     )
@@ -38,7 +38,7 @@ def main():
 
     
     mybot.job_queue.run_repeating(send_updates, interval=30, first=300)
-    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(12,0,0))
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(17,22,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(
