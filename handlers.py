@@ -13,6 +13,14 @@ from telegram import User
 from utils import *
 import settings, base
 
+
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                    level = logging.INFO,
+                    filename = 'bot.log'
+                    )
+
+
+
 def get_contact(bot, update):
     print(update.message.contact)    
     
@@ -52,6 +60,7 @@ def admin_get_passw(bot, update):
 
 
 def send_one_post(bot, post, chat_id):
+    logging.info(f'Отправляем пост для: {chat_id}')
     text = handle_text(post[0])
     images = post[1]
     post_id = post[4]            
@@ -64,12 +73,14 @@ def send_one_post(bot, post, chat_id):
                 chat_id=chat_id, text=text, 
                 reply_markup=get_inline_keyboard(bot, images + ', ' + post_id)
                 )
+        logging.info(f'Отправили сообщение в Телеграм: {text[:50]}...')
     else: 
         tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
         bot.sendMessage(
                 chat_id=chat_id, text=tg_text, 
                 reply_markup=get_inline_keyboard(bot, images + ', ' + post_id)
                 )
+        logging.info(f'Отправили сообщение в Телеграф: {text[:50]}...')
 
 post_list = base.handle_data('story_holodkova', 5)     
 
@@ -98,26 +109,24 @@ def admin_handle_posts_to_tg(bot, job):
 
 def func(bot, update):
     query = update.callback_query # Можно вывести на печать и посмотреть его
-    if query.data != '1':    # В query.data хранится айди истории        
-        post_id, images_list = parse_inline_data(query.data)     
-        bot.delete_message(chat_id = query.message.chat_id , message_id=query.message.message_id)
-        
+    if query.data != '1':    # В query.data хранится айди истории
+        logging.info('Админ нажал НЕТ.')        
+        post_id, images_list = parse_inline_data(query.data) 
+
+        bot.delete_message(chat_id = query.message.chat_id , message_id=query.message.message_id)        
         base.delete_string_from_base('list_of_posts_base.db', 'story_holodkova', 'id', post_id)                    
         remove_item_from_post_list(post_list, post_id)
-        
+        logging.info(f'Удалили из списка постов неподходящее значение: {post_id}')        
         if images_list != '':
             delete_images(images_list, 'story_holodkova')
         
         new_data = base.execute_data_from_base('story_holodkova')
-        print(len(post_list))
+        logging.info('Длина списка постов: ' + len(post_list))
         post_list.append(new_data)
         send_one_post(bot, new_data, query.message.chat_id)        
-        print(len(post_list))
+        logging.info('После добавления новых постов длина списка: ' + len(post_list))
 
         
-# TODO По нажатию НЕТ должно:
-
-# TODO 3. Отобрать из базы случайную историю и прислать её в чат на модерацию
 
 
 def dontknow(bot, update, user_data):
@@ -131,9 +140,14 @@ def send_updates(bot, job):
     users_list = base.list_from_base_column('chat_id')
     for user in users_list:
         #bot.sendMessage(chat_id=chat_id[0], text='Buzz!') # Вставить текст сообщений              
-        post = post_list[-1]
-        chat_id = user[0]
+        try:
+            post = post_list[-1]
+            chat_id = user[0]
+            logging.info(f'Отправляем сообщения пользователю {chat_id}')
         
-        send_one_post(bot, post, chat_id)
-        post_list.remove(post_list[-1])
+            send_one_post(bot, post, chat_id)
+            post_list.remove(post_list[-1])
+        except IndexError:
+            print('В списке постов нет данных. Пользователи получили все сообщения.')
+            logging.info('В списке постов нет данных. Пользователи получили все сообщения.')
 

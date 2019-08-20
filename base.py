@@ -1,10 +1,18 @@
 
 import datetime
+import logging
 import random
 import sqlite3
 
 import settings
 from utils import *
+
+
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                    level = logging.INFO,
+                    filename = 'bot.log'
+                    )
+
 
 
 
@@ -17,6 +25,7 @@ def execute_data_from_base(tablename):
     rand_numb = random.randint(1, int(count_items))
     cursor.execute(f"SELECT post_text, img, post_date, post_to, id FROM {tablename} where rowid = ?", (rand_numb,))
     data = cursor.fetchall()[0] 
+    logging.info(f'Успешно достали случайное значение из базы данных: {data}')
     conn.close()      
     return data  
 
@@ -56,8 +65,7 @@ def handle_data(tablename, number_of_posts):
         if pass_filters(data, data_list) == False:
             continue
         data_list.append(data)
-    print(data_list)
-    print(len(data_list))
+    logging.info(f'Сформировали список постов. Длина -- {len(data_list)}')
     return data_list
 
 
@@ -81,6 +89,19 @@ def write_data_to_base(entry):
     
     conn.commit()
     conn.close()   
+
+
+def get_initial_data(update, user_role):
+    chat_id = update.message.chat_id
+    first_name = update.message.chat.first_name
+    last_name = update.message.chat.last_name
+    user_id = update.message.from_user.id
+    role = user_role
+    initial_user_data = (chat_id, first_name, last_name, user_id, role)
+    logging.info('Результат функции get_initial_data: ' + initial_user_data)
+    return initial_user_data
+
+
 
 def write_initial_data_to_base(update, user_role):
     data = get_initial_data(update, user_role)
@@ -112,8 +133,8 @@ def delete_string_from_base(base, table, column, value):
     cursor = conn.cursor()
     cursor.execute(f'DELETE FROM {table} WHERE {column}=?', (value,))
     conn.commit()
-    conn.close()
-    print(f'Удалил из {table} айди {value}')
+    conn.close()    
+    logging.info(f'Удалил из {table} айди {value}')
 
 
 if __name__ == "__main__":   
