@@ -117,7 +117,13 @@ def func(bot, update):
         logging.info(f'Удалили из списка постов неподходящее значение: {post_id}')        
         if images_list != '':
             delete_images(images_list, 'story_holodkova')        
-        new_data = base.execute_data_from_base('story_holodkova')
+        while True:    
+            new_data = base.execute_data_from_base('story_holodkova')
+            try:
+                if len(new_data) == 5:
+                    break
+            except TypeError:
+                pass
         logging.info('Длина списка постов: ' + str(len(post_list)))
         post_list.append(new_data)
         send_one_post(bot, new_data, query.message.chat_id)        

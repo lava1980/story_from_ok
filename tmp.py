@@ -16,3 +16,4 @@ def execute_data_from_base(tablename):
 
 data = execute_data_from_base('story_holodkova')
 print(data)
+print(len(data))

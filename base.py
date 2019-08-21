@@ -27,11 +27,12 @@ def execute_data_from_base(tablename):
     try:
         data = cursor.fetchall()[0] 
         logging.info(f'Успешно достали случайное значение из базы данных: {data}')
+        conn.close()      
+        return data  
     except IndexError:
         logging.info('Не удалось достать случайное значение из базы.')
+        conn.close()
     
-    conn.close()      
-    return data  
 
 
 def pass_date_filter(date):
