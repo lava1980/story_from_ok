@@ -146,17 +146,16 @@ def send_updates(bot, job):
     logging.info(f'Всего будет отправлено {str(len(post_list_for_logging))}.')
     logging.info(f'Список постов для отправки юзерам: {str(post_list_for_logging)}')
     users_list = base.list_from_base_column('chat_id')
-    for user in users_list: 
-        for post in post_list:       
-            try:                
-                logging.info(f'НОВЫЙ СПИСОК ПОСТОВ для отправки юзерам: {str(post_list_for_logging)}')
-                chat_id = user[0]
-                logging.info(f'Отправляем сообщения пользователю {chat_id}')        
-                send_one_post(bot, post, chat_id)
-                #del post_list[0]
-                #del post_list_for_logging[0]
-            except IndexError:
-                print('В списке постов нет данных. Пользователи получили все сообщения.')
-                logging.info('В списке постов нет данных. Пользователи получили все сообщения.')
-    post_list = []
-    logging.info('Обнулили список постов')
+    for user in users_list:         
+        try:                
+            post = post_list[0]
+            logging.info(f'НОВЫЙ СПИСОК ПОСТОВ для отправки юзерам: {str(post_list_for_logging)}')
+            chat_id = user[0]
+            logging.info(f'Отправляем сообщения пользователю {chat_id}')        
+            send_one_post(bot, post, chat_id)
+        except IndexError:
+            print('В списке постов нет данных. Пользователи получили все сообщения.')
+            logging.info('В списке постов нет данных. Пользователи получили все сообщения.')
+    if len(post_list) != 0:
+        del post_list[0]
+        del post_list_for_logging[0]

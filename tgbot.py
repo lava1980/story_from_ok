@@ -38,7 +38,7 @@ def main():
 
     
     mybot.job_queue.run_repeating(send_updates, interval=30, first=180)
-    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(2,17,0))
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(2,48,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(

@@ -24,8 +24,12 @@ def execute_data_from_base(tablename):
     count_items = cursor.fetchone()[0]    
     rand_numb = random.randint(1, int(count_items))
     cursor.execute(f"SELECT post_text, img, post_date, post_to, id FROM {tablename} where rowid = ?", (rand_numb,))
-    data = cursor.fetchall()[0] 
-    logging.info(f'Успешно достали случайное значение из базы данных: {data}')
+    try:
+        data = cursor.fetchall()[0] 
+        logging.info(f'Успешно достали случайное значение из базы данных: {data}')
+    except IndexError:
+        logging.info('Не удалось достать случайное значение из базы.')
+    
     conn.close()      
     return data  
 
