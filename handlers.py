@@ -87,11 +87,7 @@ post_list = base.handle_data('story_holodkova', 5)
 
 def send_posts_to_admin(bot, job, chat_id):    
     for post in post_list:   
-        images = post[1]      
-        if images == None:
-            images = ''        
-        post_id = post[4]            
-        kb = get_inline_keyboard(bot, images + ', ' + post_id)
+        kb = handle_admin_keyboard(bot, post)
         try:
             send_one_post(bot, post, chat_id, kb)
         except TelegraphException:
@@ -126,13 +122,7 @@ def func(bot, update):
         logging.info('Длина списка постов: ' + str(len(post_list)))
         post_list.append(new_data)
         
-        images = new_data[1]
-        if images == None:
-            images = ''        
-
-        post_id = new_data[4]            
-        kb = get_inline_keyboard(bot, images + ', ' + post_id)
-
+        kb = handle_admin_keyboard(bot, new_data)
         send_one_post(bot, new_data, query.message.chat_id, kb)        
         logging.info('После добавления новых постов длина списка: ' + str(len(post_list)))
 
@@ -166,8 +156,6 @@ def send_updates(bot, job):
             chat_id = user[0]
             logging.info(f'Отправляем сообщения пользователю {chat_id}')  
             kb = get_user_inline_keyboard()
-
-
             send_one_post(bot, post, chat_id, kb)
         except IndexError:
             print('В списке постов нет данных. Пользователи получили все сообщения.')

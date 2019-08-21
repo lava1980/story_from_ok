@@ -38,8 +38,9 @@ def main():
     dp = mybot.dispatcher
 
     # Интервал: 8640
+    # mybot.job_queue.run_repeating(send_updates, interval=set_interval(settings.POST_COUNT), first=180)
     mybot.job_queue.run_repeating(send_updates, interval=20, first=180)
-    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(15,58,0))
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(16,49,0))
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(

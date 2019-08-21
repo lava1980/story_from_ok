@@ -34,6 +34,16 @@ def get_inline_keyboard(bot, inline_data):
     kbd_markup = InlineKeyboardMarkup(inlinekeyboard)
     return kbd_markup
 
+
+def handle_admin_keyboard(bot, post):
+    images = post[1]      
+    if images == None:
+        images = ''        
+    post_id = post[4]            
+    kb = get_inline_keyboard(bot, images + ', ' + post_id)
+    return kb
+
+
 def get_user_inline_keyboard():
     inlinekeyboard = []
     kbd_markup = InlineKeyboardMarkup(inlinekeyboard)
@@ -106,7 +116,14 @@ def remove_item_from_post_list(post_list, del_id):
     return post_list
 
         
-    
+def set_interval(post_count):
+    interval = 11 / post_count * 3600
+    return interval
+
+
+
+
+
 
 
 if __name__ == "__main__":
