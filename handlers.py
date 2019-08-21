@@ -59,7 +59,7 @@ def admin_get_passw(bot, update):
 
 
 
-def send_one_post(bot, post, chat_id):
+def send_one_post(bot, post, chat_id, keyboard):
     logging.info(f'Отправляем пост для: {chat_id}')
     text = handle_text(post[0])
     images = post[1]
@@ -71,14 +71,14 @@ def send_one_post(bot, post, chat_id):
     if len(text) < 4096:
         bot.sendMessage(
                 chat_id=chat_id, text=text, 
-                reply_markup=get_inline_keyboard(bot, images + ', ' + post_id)
+                reply_markup=keyboard
                 )
         logging.info(f'Отправили сообщение в Телеграм: {post_id}, {text[:50]}...')
     else: 
         tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
         bot.sendMessage(
                 chat_id=chat_id, text=tg_text, 
-                reply_markup=get_inline_keyboard(bot, images + ', ' + post_id)
+                reply_markup=keyboard                
                 )
         logging.info(f'Отправили сообщение в Телеграф: {post_id}, {text[:50]}...')
 
@@ -86,13 +86,18 @@ post_list = base.handle_data('story_holodkova', 5)
 
 
 def send_posts_to_admin(bot, job, chat_id):    
-    for post in post_list:
+    for post in post_list:   
+        images = post[1]      
+        if images == None:
+            images = ''        
+        post_id = post[4]            
+        kb = get_inline_keyboard(bot, images + ', ' + post_id)
         try:
-            send_one_post(bot, post, chat_id)
+            send_one_post(bot, post, chat_id, kb)
         except TelegraphException:
             remove_item_from_post_list(post_list, post[4])
             new_data = base.execute_data_from_base('story_holodkova')
-            send_one_post(bot, new_data, chat_id)
+            send_one_post(bot, new_data, chat_id, kb)
             post_list.append(new_data)
 
        
@@ -120,7 +125,15 @@ def func(bot, update):
         new_data = base.execute_data_from_base('story_holodkova')
         logging.info('Длина списка постов: ' + str(len(post_list)))
         post_list.append(new_data)
-        send_one_post(bot, new_data, query.message.chat_id)        
+        
+        images = new_data[1]
+        if images == None:
+            images = ''        
+
+        post_id = new_data[4]            
+        kb = get_inline_keyboard(bot, images + ', ' + post_id)
+
+        send_one_post(bot, new_data, query.message.chat_id, kb)        
         logging.info('После добавления новых постов длина списка: ' + str(len(post_list)))
 
         
@@ -151,8 +164,11 @@ def send_updates(bot, job):
             post = post_list[0]
             logging.info(f'НОВЫЙ СПИСОК ПОСТОВ для отправки юзерам: {str(post_list_for_logging)}')
             chat_id = user[0]
-            logging.info(f'Отправляем сообщения пользователю {chat_id}')        
-            send_one_post(bot, post, chat_id)
+            logging.info(f'Отправляем сообщения пользователю {chat_id}')  
+            kb = get_user_inline_keyboard()
+
+
+            send_one_post(bot, post, chat_id, kb)
         except IndexError:
             print('В списке постов нет данных. Пользователи получили все сообщения.')
             logging.info('В списке постов нет данных. Пользователи получили все сообщения.')

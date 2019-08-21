@@ -34,6 +34,12 @@ def get_inline_keyboard(bot, inline_data):
     kbd_markup = InlineKeyboardMarkup(inlinekeyboard)
     return kbd_markup
 
+def get_user_inline_keyboard():
+    inlinekeyboard = []
+    kbd_markup = InlineKeyboardMarkup(inlinekeyboard)
+    return kbd_markup
+
+
 
 def parse_inline_data(data):
     images_list = data.split(', ')
