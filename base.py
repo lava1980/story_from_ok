@@ -27,7 +27,7 @@ def execute_data_from_base(tablename):
         cursor.execute(f"SELECT post_text, img, post_date, post_to, id FROM {tablename} where rowid = ?", (rand_numb,))
         try:
             data = cursor.fetchall()[0] 
-            logging.info(f'Успешно достали случайное значение из базы данных: {data}')
+            logging.info(f'Успешно достали случайное значение из базы данных: {data[0][:50]}')
             conn.close()      
             return data  
         except IndexError:

@@ -9,6 +9,8 @@ from telegram.ext import ConversationHandler
 from telegram.ext import messagequeue as mq
 from telegram import User
 
+from telegraph.exceptions import TelegraphException
+
 
 from utils import *
 import settings, base
@@ -74,8 +76,12 @@ def send_one_post(bot, post, chat_id, keyboard):
                 reply_markup=keyboard
                 )
         logging.info(f'Отправили сообщение в Телеграм: {post_id}, {text[:50]}...')
-    else: 
+    elif len(text) > 32798:
+        logging.info('Не удалось отправить пост в Телеграф. Пост слишком большой.')
+    else:         
         tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
+        # TODO Разбить на отдельные функции -- отправку в Телеграм и в Телеграф
+        # TODO Проверку что слать делать снаружи
         bot.sendMessage(
                 chat_id=chat_id, text=tg_text, 
                 reply_markup=keyboard                
