@@ -38,9 +38,15 @@ def main():
     dp = mybot.dispatcher
 
     # Интервал: 8640
+<<<<<<< HEAD
     mybot.job_queue.run_repeating(send_updates, interval=set_interval(settings.POST_COUNT), first=180)
     # mybot.job_queue.run_repeating(send_updates, interval=20, first=180)
     mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(9,0,0))
+=======
+    # mybot.job_queue.run_repeating(send_updates, interval=set_interval(settings.POST_COUNT), first=180)
+    mybot.job_queue.run_repeating(send_updates, interval=20, first=120)
+    mybot.job_queue.run_daily(admin_handle_posts_to_tg, time=datetime.time(15,1,0))
+>>>>>>> 017488b46def63f92c104491cca3d624a3419c55
 
     dp.add_handler(MessageHandler(Filters.contact, get_contact))
     admin_mode = ConversationHandler(
@@ -66,10 +72,6 @@ def main():
     #                 url_path=settings.TOKEN,
     #                 webhook_url=f'{webhook_domain}:{str(PORT)}/{settings.TOKEN}')
     
-    # mybot.bot.setWebhook('https://api.telegram.org/bot924321187:AAF2e8Cb051Xv-x9VySJGAkAK1An6tOimOE/setWebhook?url=https://python-developer.ru/924321187:AAF2e8Cb051Xv-x9VySJGAkAK1An6tOimOE')
-    # https://api.telegram.org/bot924321187:AAF2e8Cb051Xv-x9VySJGAkAK1An6tOimOE/setWebhook?url=https://9dc689bc.ngrok.io:88/924321187:AAF2e8Cb051Xv-x9VySJGAkAK1An6tOimOE
-
-# https://api.telegram.org/bot924321187:AAF2e8Cb051Xv-x9VySJGAkAK1An6tOimOE/getWebhookInfo
     mybot.start_polling()
     mybot.idle()
 

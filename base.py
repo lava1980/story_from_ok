@@ -27,7 +27,7 @@ def execute_data_from_base(tablename):
         cursor.execute(f"SELECT post_text, img, post_date, post_to, id FROM {tablename} where rowid = ?", (rand_numb,))
         try:
             data = cursor.fetchall()[0] 
-            logging.info(f'Успешно достали случайное значение из базы данных: {data}')
+            logging.info(f'Успешно достали случайное значение из базы данных: {data[0][:50]}')
             conn.close()      
             return data  
         except IndexError:
@@ -144,11 +144,5 @@ def delete_string_from_base(base, table, column, value):
     print(f'Удалил из {table} айди {value}')
 
 
-if __name__ == "__main__":   
-
-    #entry = ('5', '5', '5', '5', '5', '5', '5')
-    # entry = ('5')
-
-    handle_data('story_holodkova', 5)
-    # create_users_table()
-    # delete_string_from_base('chat_id', '529133148')
+if __name__ == "__main__":
+    pass
