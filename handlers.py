@@ -88,8 +88,6 @@ def send_one_post(bot, post, chat_id, keyboard):
                 )
         logging.info(f'Отправили сообщение в Телеграф: {post_id}, {text[:50]}...')
 
-post_list = base.handle_data('story_holodkova', 5)     
-
 
 def send_posts_to_admin(bot, job, chat_id):    
     for post in post_list:   
@@ -170,5 +168,11 @@ def send_updates(bot, job):
         del post_list[0]
         del post_list_for_logging[0]
 
+
+def main():
+    global post_list
+    post_list = base.handle_data('story_holodkova', 5)    
+
+
 if __name__ == "__main__":
-    pass
+    main()
