@@ -127,8 +127,4 @@ def set_interval(post_count):
 
 
 if __name__ == "__main__":
-    #main()
-    # data = '777778887699-1.webp, 777778887699-2.webp, 777778887699'
-    # parse_inline_data(data)
-    aproved_post_list = [('Больше другого в на...Дегтерева', None, None, None, '70712314820019'), ('СЁМУШКА \n\n-Сёмушк...ндр Гутин', None, None, None, '70698537448883'), ('... Если долго смот...лакала...', '70760910288307-1.webp', None, None, '70760910288307'), ('"Старушечка \nСтару...я Иванова', None, None, None, '70520225985971'), ('Стою я сейчас за на...nРаевская', '70625861039539-1.webp', None, None, '70625861039539')]    
-    remove_item_from_post_list(aproved_post_list, '70698537448883')
+    pass

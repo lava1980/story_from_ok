@@ -144,11 +144,5 @@ def delete_string_from_base(base, table, column, value):
     print(f'Удалил из {table} айди {value}')
 
 
-if __name__ == "__main__":   
-
-    #entry = ('5', '5', '5', '5', '5', '5', '5')
-    # entry = ('5')
-
-    handle_data('story_holodkova', 5)
-    # create_users_table()
-    # delete_string_from_base('chat_id', '529133148')
+if __name__ == "__main__":
+    pass

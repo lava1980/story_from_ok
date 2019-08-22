@@ -169,3 +169,6 @@ def send_updates(bot, job):
     if len(post_list) != 0:
         del post_list[0]
         del post_list_for_logging[0]
+
+if __name__ == "__main__":
+    pass
