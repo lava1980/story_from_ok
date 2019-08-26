@@ -6,7 +6,7 @@ import sqlite3
 
 import settings
 from utils import *
-
+# from utils import get_initial_data
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s - %(message)s',
                     level = logging.INFO,
@@ -95,7 +95,6 @@ def write_data_to_base(entry):
     
     conn.commit()
     conn.close()   
-
 
 def get_initial_data(update, user_role):
     chat_id = update.message.chat_id

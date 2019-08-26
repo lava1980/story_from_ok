@@ -168,11 +168,8 @@ def send_updates(bot, job):
         del post_list[0]
         del post_list_for_logging[0]
 
-
-def main():
-    global post_list
-    post_list = base.handle_data('story_holodkova', 5)    
-
+post_list = base.handle_data('story_holodkova', 5) 
+   
 
 if __name__ == "__main__":
-    main()
+    pass

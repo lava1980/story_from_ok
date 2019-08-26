@@ -8,7 +8,7 @@ from telegraph import Telegraph
 from telegraph.exceptions import TelegraphException
 
 
-import base
+# import base
 
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s - %(message)s',
