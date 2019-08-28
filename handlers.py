@@ -1,3 +1,4 @@
+import datetime
 from glob import glob
 import logging
 import os
@@ -20,6 +21,11 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s - %(messa
                     level = logging.INFO,
                     filename = 'bot.log'
                     )
+
+
+
+post_list = base.handle_data('story_holodkova', 5)
+
 
 
 
@@ -168,8 +174,3 @@ def send_updates(bot, job):
         del post_list[0]
         del post_list_for_logging[0]
 
-post_list = base.handle_data('story_holodkova', 5) 
-   
-
-if __name__ == "__main__":
-    pass
