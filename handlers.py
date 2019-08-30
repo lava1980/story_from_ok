@@ -24,7 +24,7 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s - %(messa
 
 
 
-post_list = base.handle_data('story_holodkova', 5)
+post_list = base.handle_data('story_holodkova', settings.POST_COUNT)
 
 
 
@@ -100,16 +100,22 @@ def send_posts_to_admin(bot, job, chat_id):
         kb = handle_admin_keyboard(bot, post)
         try:
             send_one_post(bot, post, chat_id, kb)
+            logging.info(f'Отправлено сообщение на модерацию АДМИНУ: {post[0][:50]}')
         except TelegraphException:
             remove_item_from_post_list(post_list, post[4])
             new_data = base.execute_data_from_base('story_holodkova')
             send_one_post(bot, new_data, chat_id, kb)
+            logging.info(f'Отправлено сообщение на модерацию АДМИНУ: {new_data[0][:50]}')
             post_list.append(new_data)
 
        
 
 
-def admin_handle_posts_to_tg(bot, job):    
+def admin_handle_posts_to_tg(bot, job): 
+    logging.info('Обрабатываем регулярные сообщения АДМИНУ') 
+    global post_list
+    if len(post_list) == 0:
+        post_list = base.handle_data('story_holodkova', settings.POST_COUNT)
     admin_list = base.get_admin_list('chat_id')    
     for admin in admin_list:
         chat_id = admin[0]
