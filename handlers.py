@@ -95,18 +95,25 @@ def send_one_post(bot, post, chat_id, keyboard):
         logging.info(f'Отправили сообщение в Телеграф: {post_id}, {text[:50]}...')
 
 
-def send_posts_to_admin(bot, job, chat_id):    
+def send_posts_to_admin(bot, job, chat_id): 
+    list_of_post_id = []   
     for post in post_list:   
         kb = handle_admin_keyboard(bot, post)
         try:
             send_one_post(bot, post, chat_id, kb)
             logging.info(f'Отправлено сообщение на модерацию АДМИНУ: {post[0][:50]}')
         except TelegraphException:
-            remove_item_from_post_list(post_list, post[4])
+            logging.info('Исключение ТелеграФФ')
+            print('Исключение ТелеграФФ')
+            post_id = post[4]
+            list_of_post_id.append(post_id)
+            # remove_item_from_post_list(post_list, post_id)
             new_data = base.execute_data_from_base('story_holodkova')
-            send_one_post(bot, new_data, chat_id, kb)
-            logging.info(f'Отправлено сообщение на модерацию АДМИНУ: {new_data[0][:50]}')
+            # send_one_post(bot, new_data, chat_id, kb)
+            # logging.info(f'Отправлено сообщение на модерацию АДМИНУ: {new_data[0][:50]}')
             post_list.append(new_data)
+    for post_id in list_of_post_id:
+        remove_item_from_post_list(post_list, post_id)
 
        
 
