@@ -34,15 +34,15 @@ def main():
     mybot.bot._is_messages_queued_default=True
 
 
-    logging.info('Бот запускается')
+    logging.info('Бот запускается.')
 
     dp = mybot.dispatcher
 
     # Интервал: 8640
-    # mybot.job_queue.run_repeating(handlers.send_updates, interval=utils.set_interval(settings.POST_COUNT), first=60)
-    mybot.job_queue.run_repeating(handlers.send_updates, interval=20, first=600)
-    mybot.job_queue.run_repeating(handlers.admin_handle_posts_to_tg, interval=3600, first=1)
-    # mybot.job_queue.run_daily(handlers.admin_handle_posts_to_tg, time=settings.ADMIN_TIME)
+    mybot.job_queue.run_repeating(handlers.send_updates, interval=utils.set_interval(settings.POST_COUNT), first=300)
+    # mybot.job_queue.run_repeating(handlers.send_updates, interval=20, first=600)
+    # mybot.job_queue.run_repeating(handlers.admin_handle_posts_to_tg, interval=3600, first=1)
+    mybot.job_queue.run_daily(handlers.admin_handle_posts_to_tg, time=settings.ADMIN_TIME)
 
     dp.add_handler(MessageHandler(Filters.contact, handlers.get_contact))
     admin_mode = ConversationHandler(
