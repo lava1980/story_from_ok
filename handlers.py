@@ -84,7 +84,8 @@ def send_one_post(bot, post, chat_id, keyboard):
         logging.info(f'Отправили сообщение в Телеграм: {post_id}, {text[:50]}...')
     elif len(text) > 32798:
         logging.info('Не удалось отправить пост в Телеграф. Пост слишком большой.')
-    else:         
+    else:   
+        # TODO Обработать исключение ТелеграФФ, чтобы было как в send_posts_to_admin      
         tg_text = create_telegraph_page('Ещё одна история...', text_to_html(text))
         # TODO Разбить на отдельные функции -- отправку в Телеграм и в Телеграф
         # TODO Проверку что слать делать снаружи
