@@ -29,12 +29,6 @@ post_list = base.handle_data('story_holodkova', settings.POST_COUNT)
 
 
 
-def get_contact(bot, update):
-    print(update.message.contact)    
-    
-  
-
-
         
 def subscribe(bot, update):
     base.write_initial_data_to_base(update, 'user')
@@ -63,8 +57,6 @@ def admin_get_passw(bot, update):
     else:
         update.message.reply_text('Неверный пароль')
         return 'admin_passw' # Замыкаем на том же ключе, т.е. пароль ввёл неправильно
-
-
 
 
 def send_one_post(bot, post, chat_id, keyboard):
