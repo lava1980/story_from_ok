@@ -58,18 +58,23 @@ def main():
     dp.add_handler(CommandHandler('start', handlers.subscribe))
     dp.add_handler(CommandHandler('unsubscribe', handlers.unsubscribe))  
     
-    # dp.add_handler(MessageHandler(Filters.text, test_message))
     
-    # webhook_domain = 'https://python-developer.ru'
-    # webhook_domain = 'https://9dc689bc.ngrok.io'
-    # PORT = 88
     
-    # mybot.start_webhook(listen='0.0.0.0',
-    #                 port=PORT,
-    #                 url_path=settings.TOKEN,
-    #                 webhook_url=f'{webhook_domain}:{str(PORT)}/{settings.TOKEN}')
+    webhook_domain = 'https://python-developer.ru'
+    # webhook_domain = 'https://8a10ec94.ngrok.io'
+    PORT = 5000
     
-    mybot.start_polling(poll_interval=5.0)
+    # Использовать незарезервированный порт, например, 5000. 
+    # Если порт зарезервирован, то будет 502 bad gateway
+    # Порт сервера и порт в ngrok должны совпадать. В механике разберусь потом. 
+
+
+    mybot.start_webhook(listen='127.0.0.1',
+                    port=PORT,
+                    url_path=settings.TOKEN,
+                    webhook_url=f'{webhook_domain}/{settings.TOKEN}')
+    
+    
     mybot.idle()
 
 
