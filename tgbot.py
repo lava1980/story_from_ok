@@ -27,8 +27,12 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s - %(messa
 
 
 def main():
-    mybot = Updater(settings.TOKEN)
-
+    
+    REQUEST_KWARGS={
+    'proxy_url': 'https://ec991073.ngrok.io'
+ 
+}
+    mybot = Updater(settings.TOKEN, request_kwargs=REQUEST_KWARGS)
     # Инициализируем MessageQueue 
     mybot.bot._msg_queue = mq.MessageQueue()
     mybot.bot._is_messages_queued_default=True
@@ -61,8 +65,8 @@ def main():
     
     
     webhook_domain = 'https://python-developer.ru'
-    # webhook_domain = 'https://8a10ec94.ngrok.io'
-    PORT = 5000
+    # webhook_domain = 'https://ec991073.ngrok.io'
+    PORT = 5079
     
     # Использовать незарезервированный порт, например, 5000. 
     # Если порт зарезервирован, то будет 502 bad gateway
